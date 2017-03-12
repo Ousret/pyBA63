@@ -11,4 +11,5 @@ setup(
     download_url='https://github.com/Ousret/pyBA63/tarball/0.1',
     keywords=['wincor nixdorf', 'line display', 'ba63', 'hid'],
     classifiers=[],
+    requires=['hidapi', 'unidecode']
 )
