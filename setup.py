@@ -8,7 +8,7 @@ setup(
     author='Ahmed TAHRI',
     author_email='ahmed@tahri.space',
     url='https://github.com/Ousret/pyBA63',
-    download_url='https://github.com/Ousret/pyBA63/tarball/0.1',
+    download_url='https://github.com/Ousret/pyBA63/tarball/0.1.5',
     keywords=['wincor nixdorf', 'line display', 'ba63', 'hid'],
     classifiers=[],
     requires=['unidecode', 'cython', 'hidapi']
