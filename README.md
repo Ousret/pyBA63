@@ -1,6 +1,22 @@
-# pyBA63
-Handle BA63 USB HID line display with ease.
+# pyBA63 0.1.6
+Python based driver for Wincor Nixdorf BA63 USB HID line display.
+Most used for point-of-sale.
 
+## Installation
+
+Via PyPi
+```sh
+pip install pyBA63
+```
+
+Via git cloning
+```sh
+git clone https://github.com/Ousret/pyBA63.git
+cd pyBA63/
+python setup.py install
+```
+
+## Usage
 ```python
 # How to initialise device
 from ba63 import BA63
@@ -11,6 +27,7 @@ my_device = BA63.get()
 
 if my_device is None:
     print('BA63 USB display was not found.')
+    exit(1)
 
 # Set charset to FR
 my_device.charset(SEQUENCE_CHARSET_FR)
