@@ -2,7 +2,6 @@ from hid import enumerate
 from ba63.simple_hid import SimpleHID
 from ba63.constant import SEQUENCE_MARQUEUR_DEBUT, SEQUENCES_CURSEUR, SEQUENCE_NETTOYAGE, SEQUENCE_SET_CHARSET, TAILLE_MESSAGE_MAX, NOMBRE_CARACTERES_PAR_LIGNE
 from unidecode import unidecode
-import hexdump
 
 
 class FormatDonneesInvalideBA63(Exception):
@@ -26,6 +25,8 @@ class FormatTexteInvalideBA63(Exception):
 
 
 class BA63(SimpleHID):
+
+    hid_tree = None
 
     def __init__(self, chemin):
         super().__init__(chemin)
@@ -99,12 +100,20 @@ class BA63(SimpleHID):
         :return: Nouvelle instance du BA63
         :rtype: BA63
         """
-        hid_disponible = enumerate()
+        if BA63.hid_tree is None:
+            BA63.hid_tree = enumerate()  # type: list
 
-        for dev in hid_disponible:
-            if dev['vendor_id'] == identifiant_vendeur and dev['product_id'] == identifiant_materiel and dev['interface_number'] == interface_cible:
+        for dev in BA63.hid_tree:
+            # Cas LINUX ~ WINDOWS
+            if dev['vendor_id'] == identifiant_vendeur \
+                    and dev['product_id'] == identifiant_materiel \
+                    and dev['interface_number'] == interface_cible:
                 return BA63(dev['path'])
-            elif dev['vendor_id'] == identifiant_vendeur and dev['product_id'] == identifiant_materiel and dev['interface_number'] == -1 and dev['usage'] == 9216:
+            # Cas DARWIN
+            elif dev['vendor_id'] == identifiant_vendeur \
+                    and dev['product_id'] == identifiant_materiel \
+                    and dev['interface_number'] == -1 \
+                    and dev['usage'] == 9216:
                 return BA63(dev['path'])
 
         return None
