@@ -2,7 +2,7 @@ from hid import enumerate
 from ba63.simple_hid import SimpleHID
 from ba63.constant import SEQUENCE_MARQUEUR_DEBUT, SEQUENCES_CURSEUR, SEQUENCE_NETTOYAGE, SEQUENCE_SET_CHARSET, TAILLE_MESSAGE_MAX, NOMBRE_CARACTERES_PAR_LIGNE
 from unidecode import unidecode
-import platform
+import hexdump
 
 
 class FormatDonneesInvalideBA63(Exception):
@@ -43,7 +43,7 @@ class BA63(SimpleHID):
             raise TailleMessageTropGrande('La construction de paquet a échoué car votre message est de taille %i '
                                           'octets mais la taille maximale est de %i octets' % (len(donnees),
                                                                                                TAILLE_MESSAGE_MAX))
-        return SEQUENCE_MARQUEUR_DEBUT + bytes(len(donnees)) + donnees
+        return SEQUENCE_MARQUEUR_DEBUT + bytes(chr(len(donnees)), 'ascii') + donnees
 
     def imprimer(self, numero_ligne, message):
         """
@@ -100,12 +100,11 @@ class BA63(SimpleHID):
         :rtype: BA63
         """
         hid_disponible = enumerate()
-        noyau_systeme = platform.system()
 
         for dev in hid_disponible:
             if dev['vendor_id'] == identifiant_vendeur and dev['product_id'] == identifiant_materiel and dev['interface_number'] == interface_cible:
                 return BA63(dev['path'])
-            elif dev['vendor_id'] == identifiant_vendeur and dev['product_id'] == identifiant_materiel and dev['interface_number'] == -1:
-                pass  # TODO: Vérifier le cas Darwin -> noyau_systeme
+            elif dev['vendor_id'] == identifiant_vendeur and dev['product_id'] == identifiant_materiel and dev['interface_number'] == -1 and dev['usage'] == 9216:
+                return BA63(dev['path'])
 
         return None
