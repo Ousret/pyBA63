@@ -100,8 +100,7 @@ class BA63(SimpleHID):
         :return: Nouvelle instance du BA63
         :rtype: BA63
         """
-        if BA63.hid_tree is None:
-            BA63.hid_tree = enumerate()  # type: list
+        BA63.hid_tree = enumerate()  # type: list
 
         for dev in BA63.hid_tree:
             # Cas LINUX ~ WINDOWS
